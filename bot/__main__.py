@@ -178,7 +178,7 @@ def load_handlers():
     return bot_commands
 
 
-def main():
+async def main():
     default_param = Defaults(
         parse_mode=ParseMode.HTML,
         link_preview_options=LinkPreviewOptions(is_disabled=True),
@@ -258,8 +258,14 @@ async def app_init():
 
 
 if __name__ == "__main__":
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.create_task(app_init())
-    loop.create_task(main())
-    loop.run_forever()
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_closed():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+        loop.run_until_complete(main())
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        if not loop.is_closed():
+            loop.close()
