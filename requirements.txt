@@ -12,3 +12,4 @@ qrcode[pil]==8.0
 aiohttp[speedups]
 requests
 TgCrypto
+aiogram
